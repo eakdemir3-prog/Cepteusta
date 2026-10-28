@@ -193,7 +193,7 @@ class MainViewModel(private val repository: CepteUstaRepository) : ViewModel() {
         viewModelScope.launch {
             repository.saveProfile(profile.copy(isFirstSetupDone = true))
             _screenStack.value = listOf(Screen.Dashboard)
-            _userMessage.emit("Cepte Usta'ya hoş geldiniz!")
+            _userMessage.emit("Ustaca'ya hoş geldiniz!")
         }
     }
 

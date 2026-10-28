@@ -37,6 +37,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.theme.StatusError
+import com.example.ui.theme.StatusErrorContainer
+import com.example.ui.theme.StatusSuccess
+import com.example.ui.theme.StatusWarning
+import com.example.ui.theme.StatusInfo
 import com.example.ui.theme.ForestGreenContainer
 import com.example.ui.theme.ForestGreenOnContainer
 import com.example.ui.theme.ForestGreenPrimary
@@ -94,7 +99,7 @@ fun QuickActionBottomSheet(
             QuickActionItem(
                 icon = Icons.Default.PersonAdd,
                 iconBg = StatusInfoContainer,
-                iconTint = Color(0xFF1D4ED8),
+                iconTint = StatusInfo,
                 title = "Yeni Müşteri Ekle",
                 subtitle = "İletişim bilgisi ve adres kaydet",
                 tag = "quick_action_new_customer",
@@ -107,7 +112,7 @@ fun QuickActionBottomSheet(
             QuickActionItem(
                 icon = Icons.Default.Description,
                 iconBg = StatusWarningContainer,
-                iconTint = Color(0xFFB45309),
+                iconTint = StatusWarning,
                 title = "Fiyat Teklifi Hazırla",
                 subtitle = "Kalem kalem hesapla, PDF olarak paylaş",
                 tag = "quick_action_new_quote",
@@ -120,7 +125,7 @@ fun QuickActionBottomSheet(
             QuickActionItem(
                 icon = Icons.Default.AttachMoney,
                 iconBg = StatusSuccessContainer,
-                iconTint = Color(0xFF15803D),
+                iconTint = StatusSuccess,
                 title = "Tahsilat Ekle",
                 subtitle = "Nakit, POS veya havale ödeme kaydet",
                 tag = "quick_action_add_payment",
@@ -132,8 +137,8 @@ fun QuickActionBottomSheet(
 
             QuickActionItem(
                 icon = Icons.Default.Receipt,
-                iconBg = Color(0xFFFEE2E2),
-                iconTint = Color(0xFFB91C1C),
+                iconBg = StatusErrorContainer,
+                iconTint = StatusError,
                 title = "Gider Kaydet",
                 subtitle = "Malzeme, yakıt, kira veya fatura harcaması",
                 tag = "quick_action_add_expense",

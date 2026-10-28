@@ -292,7 +292,7 @@ fun BusinessProfileScreen(
             Button(
                 onClick = {
                     val updated = currentProfile.copy(
-                        businessName = businessName.ifBlank { "Cepte Usta" },
+                        businessName = businessName.ifBlank { "Ustaca" },
                         category = selectedCategory,
                         phone = phone.trim(),
                         email = email.trim(),

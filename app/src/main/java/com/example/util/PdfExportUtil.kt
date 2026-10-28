@@ -235,7 +235,7 @@ object PdfExportUtil {
                 textSize = 9f
                 isAntiAlias = true
             }
-            canvas.drawText("Bu teklif Cepte Usta uygulaması üzerinden hazırlanmıştır.", 32f, footerY, footerPaint)
+            canvas.drawText("Bu teklif Ustaca uygulaması ile hazırlanmıştır.", 32f, footerY, footerPaint)
             val contactFooter = "${profile.businessName} • ${profile.phone} • ${profile.address}"
             canvas.drawText(contactFooter, 32f, footerY + 14f, footerPaint)
 

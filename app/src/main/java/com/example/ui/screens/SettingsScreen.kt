@@ -162,12 +162,12 @@ fun SettingsScreen(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_brand_logo),
-                        contentDescription = "Cepte Usta",
+                        contentDescription = "Ustaca",
                         modifier = Modifier.size(64.dp)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "Cepte Usta",
+                        text = "Ustaca",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                         color = ForestGreenPrimary
                     )

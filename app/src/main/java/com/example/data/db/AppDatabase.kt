@@ -54,9 +54,9 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "cepte_usta.db"
+                    "ustaca.db"
                 )
-                    .fallbackToDestructiveMigration()
+                    // Şema değişirse veriyi silmek yerine Migration eklenmeli (kullanıcı verisi korunur).
                     .build()
                 INSTANCE = instance
                 instance

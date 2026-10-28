@@ -16,7 +16,7 @@ object CsvExportUtil {
     fun exportJobsToCsv(context: Context, jobs: List<JobWithCustomer>): File {
         val cacheDir = File(context.cacheDir, "exports")
         if (!cacheDir.exists()) cacheDir.mkdirs()
-        val file = File(cacheDir, "CepteUsta_Is_Listesi_${System.currentTimeMillis()}.csv")
+        val file = File(cacheDir, "Ustaca_Is_Listesi_${System.currentTimeMillis()}.csv")
 
         OutputStreamWriter(FileOutputStream(file), StandardCharsets.UTF_8).use { writer ->
             writer.write("\uFEFF") // UTF-8 BOM for Excel Turkish character support
@@ -34,7 +34,7 @@ object CsvExportUtil {
     fun exportCustomersToCsv(context: Context, customers: List<Customer>): File {
         val cacheDir = File(context.cacheDir, "exports")
         if (!cacheDir.exists()) cacheDir.mkdirs()
-        val file = File(cacheDir, "CepteUsta_Musteri_Listesi_${System.currentTimeMillis()}.csv")
+        val file = File(cacheDir, "Ustaca_Musteri_Listesi_${System.currentTimeMillis()}.csv")
 
         OutputStreamWriter(FileOutputStream(file), StandardCharsets.UTF_8).use { writer ->
             writer.write("\uFEFF")
@@ -54,7 +54,7 @@ object CsvExportUtil {
     ): File {
         val cacheDir = File(context.cacheDir, "exports")
         if (!cacheDir.exists()) cacheDir.mkdirs()
-        val file = File(cacheDir, "CepteUsta_Gelir_Gider_${System.currentTimeMillis()}.csv")
+        val file = File(cacheDir, "Ustaca_Gelir_Gider_${System.currentTimeMillis()}.csv")
 
         OutputStreamWriter(FileOutputStream(file), StandardCharsets.UTF_8).use { writer ->
             writer.write("\uFEFF")

@@ -50,6 +50,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.R
 import com.example.data.model.BusinessProfile
 import com.example.ui.components.CepteUstaTopBar
+import com.example.ui.theme.StatusNeutralContainer
+import com.example.ui.theme.StatusNeutral
+import com.example.ui.theme.StatusInfo
+import com.example.ui.theme.StatusSuccess
+import com.example.ui.theme.StatusWarning
 import com.example.ui.theme.ForestGreenContainer
 import com.example.ui.theme.ForestGreenOnContainer
 import com.example.ui.theme.ForestGreenPrimary
@@ -165,7 +170,7 @@ fun MoreScreen(
                     MoreMenuItem(
                         icon = Icons.Default.Description,
                         iconBg = StatusWarningContainer,
-                        iconTint = Color(0xFFB45309),
+                        iconTint = StatusWarning,
                         title = "Teklifler",
                         subtitle = "Fiyat teklifleri hazırlama ve PDF paylaşımı",
                         tag = "menu_quotes",
@@ -176,7 +181,7 @@ fun MoreScreen(
                     MoreMenuItem(
                         icon = Icons.Default.AttachMoney,
                         iconBg = StatusSuccessContainer,
-                        iconTint = Color(0xFF15803D),
+                        iconTint = StatusSuccess,
                         title = "Gelir - Gider & Kasa",
                         subtitle = "Tahsilatlar, malzeme harcamaları ve nakit akışı",
                         tag = "menu_finances",
@@ -187,7 +192,7 @@ fun MoreScreen(
                     MoreMenuItem(
                         icon = Icons.Default.Assessment,
                         iconBg = StatusInfoContainer,
-                        iconTint = Color(0xFF1D4ED8),
+                        iconTint = StatusInfo,
                         title = "Raporlar & Analiz",
                         subtitle = "Aylık performans, net kazanç ve CSV dışa aktarımı",
                         tag = "menu_reports",
@@ -219,8 +224,8 @@ fun MoreScreen(
 
                     MoreMenuItem(
                         icon = Icons.Default.Backup,
-                        iconBg = Color(0xFFF3E8FF),
-                        iconTint = Color(0xFF7E22CE),
+                        iconBg = Color(0xFF8B5CF6).copy(alpha = 0.14f),
+                        iconTint = Color(0xFF8B5CF6),
                         title = "Veri Yedekleme & Geri Yükleme",
                         subtitle = "JSON yedek dosyası, örnek veri yükleme ve sıfırlama",
                         tag = "menu_backup",
@@ -230,8 +235,8 @@ fun MoreScreen(
 
                     MoreMenuItem(
                         icon = Icons.Default.Settings,
-                        iconBg = Color(0xFFF1F5F9),
-                        iconTint = Color(0xFF334155),
+                        iconBg = StatusNeutralContainer,
+                        iconTint = StatusNeutral,
                         title = "Ayarlar",
                         subtitle = "Tema seçimi (Açık/Koyu), para birimi ve hakkında",
                         tag = "menu_settings",

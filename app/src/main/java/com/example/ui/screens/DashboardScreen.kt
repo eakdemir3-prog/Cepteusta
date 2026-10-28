@@ -369,7 +369,7 @@ fun DashboardScreen(
                 EmptyStateView(
                     icon = Icons.Default.Work,
                     title = "Henüz İş Kaydı Yok",
-                    description = "Cepte Usta ile ilk iş emrinizi oluşturarak randevularınızı, müşterilerinizi ve ödemelerinizi kolayca yönetin.",
+                    description = "Ustaca ile ilk iş emrinizi oluşturarak randevularınızı, müşterilerinizi ve ödemelerinizi kolayca yönetin.",
                     actionButtonText = "İlk İşini Ekle",
                     onActionClick = onNewJob
                 )

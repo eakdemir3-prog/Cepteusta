@@ -50,7 +50,7 @@ import com.example.ui.screens.QuotesScreen
 import com.example.ui.screens.ReportsScreen
 import com.example.ui.screens.SettingsScreen
 import com.example.ui.screens.SplashScreen
-import com.example.ui.theme.CepteUstaTheme
+import com.example.ui.theme.UstacaTheme
 
 object NavRoutes {
     const val SPLASH = "splash"
@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity() {
                 else -> isSystemInDarkTheme()
             }
 
-            CepteUstaTheme(darkTheme = isDarkTheme) {
+            UstacaTheme(darkTheme = isDarkTheme) {
                 MainAppNavigation(viewModel = viewModel, profile = currentProfile)
             }
         }

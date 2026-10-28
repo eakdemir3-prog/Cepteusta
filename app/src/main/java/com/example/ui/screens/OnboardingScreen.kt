@@ -118,7 +118,7 @@ fun OnboardingScreen(
         ) {
             // Header
             Text(
-                text = "Cepte Usta'ya Hoş Geldiniz",
+                text = "Ustaca'ya Hoş Geldiniz",
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                 color = ForestGreenPrimary
             )
@@ -251,7 +251,7 @@ fun OnboardingScreen(
             // Action Buttons
             Button(
                 onClick = {
-                    val finalName = businessName.ifBlank { "Cepte Usta" }
+                    val finalName = businessName.ifBlank { "Ustaca" }
                     val updated = initialProfile.copy(
                         businessName = finalName,
                         category = selectedCategory,

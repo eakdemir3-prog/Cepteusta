@@ -1,52 +1,126 @@
 package com.example.ui.theme
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-// Forest & Emerald brand palette
-val ForestGreenPrimary = Color(0xFF0F4D33)
-val ForestGreenOnPrimary = Color(0xFFFFFFFF)
-val ForestGreenContainer = Color(0xFFD1F2DF)
-val ForestGreenOnContainer = Color(0xFF002113)
+/**
+ * Ustaca tasarım dili: "Minimal White & Emerald" (MüşteriCep ile aynı aile).
+ * Ekranlar renkleri doğrudan hex ile değil, bu palet üzerinden okur; açık/koyu moda göre değişir.
+ */
+data class AppPalette(
+    val isDark: Boolean,
+    val ink: Color,
+    val onInk: Color,
+    val accent: Color,
+    val accentSoft: Color,
+    val onAccentSoft: Color,
+    val success: Color,
+    val successSoft: Color,
+    val danger: Color,
+    val dangerSoft: Color,
+    val warning: Color,
+    val warningSoft: Color,
+    val info: Color,
+    val infoSoft: Color,
+    val neutral: Color,
+    val neutralSoft: Color,
+    val text: Color,
+    val muted: Color,
+    val inactive: Color,
+    val cardBorder: Color
+)
 
-val MintSecondary = Color(0xFF138A58)
-val MintSecondaryOn = Color(0xFFFFFFFF)
-val MintSecondaryContainer = Color(0xFFD4E8DC)
-val MintSecondaryOnContainer = Color(0xFF0B2B1D)
+/** Açık mod: beyaz kartlar, açık gri zemin, petrol/zümrüt yeşili vurgu. */
+val DefterPalette = AppPalette(
+    isDark = false,
+    ink = Color(0xFF0F766E),
+    onInk = Color(0xFFFFFFFF),
+    accent = Color(0xFF10B981),
+    accentSoft = Color(0xFFECFDF5),
+    onAccentSoft = Color(0xFF0F766E),
+    success = Color(0xFF16A34A),
+    successSoft = Color(0xFFF0FDF4),
+    danger = Color(0xFFDC2626),
+    dangerSoft = Color(0xFFFEF2F2),
+    warning = Color(0xFFD97706),
+    warningSoft = Color(0xFFFFFBEB),
+    info = Color(0xFF2563EB),
+    infoSoft = Color(0xFFEFF6FF),
+    neutral = Color(0xFF475569),
+    neutralSoft = Color(0xFFF1F4F8),
+    text = Color(0xFF172033),
+    muted = Color(0xFF64748B),
+    inactive = Color(0xFF94A3B8),
+    cardBorder = Color(0xFFE5EAF0)
+)
 
-val AccentLime = Color(0xFF10B981)
-val AccentLimeDark = Color(0xFF34D399)
+/** Koyu mod: aynı dil, gece için. */
+val KomutaPalette = AppPalette(
+    isDark = true,
+    ink = Color(0xFF34D399),
+    onInk = Color(0xFF052E2B),
+    accent = Color(0xFF10B981),
+    accentSoft = Color(0xFF0F2E2A),
+    onAccentSoft = Color(0xFFA7F3D0),
+    success = Color(0xFF4ADE80),
+    successSoft = Color(0xFF12301F),
+    danger = Color(0xFFF87171),
+    dangerSoft = Color(0xFF3A1A1C),
+    warning = Color(0xFFFBBF24),
+    warningSoft = Color(0xFF3A2C10),
+    info = Color(0xFF60A5FA),
+    infoSoft = Color(0xFF172A45),
+    neutral = Color(0xFFCBD5E1),
+    neutralSoft = Color(0xFF1E2833),
+    text = Color(0xFFE6EBF2),
+    muted = Color(0xFF94A3B8),
+    inactive = Color(0xFF64748B),
+    cardBorder = Color(0xFF263241)
+)
 
-val WarmBackgroundLight = Color(0xFFF7FAF6)
-val WarmSurfaceLight = Color(0xFFFFFFFF)
-val WarmSurfaceVariantLight = Color(0xFFE4EDE5)
-val TextPrimaryLight = Color(0xFF18221C)
-val TextSecondaryLight = Color(0xFF4C5E53)
-val OutlineLight = Color(0xFFBDCCC0)
+val LocalAppPalette = staticCompositionLocalOf { DefterPalette }
 
-// Dark Theme palette
-val ForestGreenDarkPrimary = Color(0xFF76D8A3)
-val ForestGreenDarkOnPrimary = Color(0xFF003820)
-val ForestGreenDarkContainer = Color(0xFF07482E)
-val ForestGreenDarkOnContainer = Color(0xFFD1F2DF)
+/** WhatsApp marka yeşili (tema bağımsız). */
+val WhatsAppGreen = Color(0xFF25D366)
 
-val MintDarkSecondary = Color(0xFF86D7AE)
-val MintDarkSecondaryOn = Color(0xFF003821)
-val MintDarkSecondaryContainer = Color(0xFF1F4E37)
-val MintDarkSecondaryOnContainer = Color(0xFFC7EBD6)
+// Ekranların kullandığı eski isimler korunuyor; artık aktif temaya (açık/koyu) göre değişiyorlar.
+val ForestGreenPrimary: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.ink
 
-val BackgroundDark = Color(0xFF0D1611)
-val SurfaceDark = Color(0xFF132018)
-val SurfaceVariantDark = Color(0xFF1E2E24)
-val TextPrimaryDark = Color(0xFFE8F1EB)
-val TextSecondaryDark = Color(0xFF9FB2A5)
-val OutlineDark = Color(0xFF43584B)
+val ForestGreenContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.accentSoft
 
-// Status Colors
-val StatusSuccess = Color(0xFF15803D)
-val StatusSuccessContainer = Color(0xFFDCFCE7)
-val StatusWarning = Color(0xFFB45309)
-val StatusWarningContainer = Color(0xFFFEF3C7)
-val StatusError = Color(0xFFB91C1C)
-val StatusErrorContainer = Color(0xFFFEE2E2)
-val StatusInfo = Color(0xFF1D4ED8)
-val StatusInfoContainer = Color(0xFFDBEAFE)
+val ForestGreenOnContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.onAccentSoft
+
+val StatusSuccess: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.success
+
+val StatusSuccessContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.successSoft
+
+val StatusWarning: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.warning
+
+val StatusWarningContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.warningSoft
+
+val StatusError: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.danger
+
+val StatusErrorContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.dangerSoft
+
+val StatusInfo: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.info
+
+val StatusInfoContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.infoSoft
+
+val StatusNeutral: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.neutral
+
+val StatusNeutralContainer: Color
+    @Composable @ReadOnlyComposable get() = LocalAppPalette.current.neutralSoft

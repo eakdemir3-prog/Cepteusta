@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Cepte Usta"
+rootProject.name = "Ustaca"
 
 include(":app")

@@ -58,6 +58,8 @@ import androidx.compose.ui.unit.sp
 import com.example.data.model.JobPriority
 import com.example.data.model.JobStatus
 import com.example.data.model.QuoteStatus
+import com.example.ui.theme.StatusNeutralContainer
+import com.example.ui.theme.StatusNeutral
 import com.example.ui.theme.ForestGreenContainer
 import com.example.ui.theme.ForestGreenOnContainer
 import com.example.ui.theme.ForestGreenPrimary
@@ -119,12 +121,12 @@ fun StatusBadge(status: String) {
         JobStatus.IN_PROGRESS -> Triple(StatusWarningContainer, StatusWarning, JobStatus.getLabel(status))
         JobStatus.COMPLETED -> Triple(StatusSuccessContainer, StatusSuccess, JobStatus.getLabel(status))
         JobStatus.CANCELLED -> Triple(StatusErrorContainer, StatusError, JobStatus.getLabel(status))
-        QuoteStatus.DRAFT -> Triple(Color(0xFFE5E7EB), Color(0xFF4B5563), QuoteStatus.getLabel(status))
+        QuoteStatus.DRAFT -> Triple(StatusNeutralContainer, StatusNeutral, QuoteStatus.getLabel(status))
         QuoteStatus.SENT -> Triple(StatusInfoContainer, StatusInfo, QuoteStatus.getLabel(status))
         QuoteStatus.ACCEPTED -> Triple(StatusSuccessContainer, StatusSuccess, QuoteStatus.getLabel(status))
         QuoteStatus.REJECTED -> Triple(StatusErrorContainer, StatusError, QuoteStatus.getLabel(status))
         QuoteStatus.EXPIRED -> Triple(StatusWarningContainer, StatusWarning, QuoteStatus.getLabel(status))
-        else -> Triple(Color(0xFFE5E7EB), Color(0xFF4B5563), status)
+        else -> Triple(StatusNeutralContainer, StatusNeutral, status)
     }
 
     Surface(
@@ -146,7 +148,7 @@ fun PriorityBadge(priority: String) {
     val (bgColor, textColor, label) = when (priority) {
         JobPriority.URGENT -> Triple(StatusErrorContainer, StatusError, "Acil")
         JobPriority.HIGH -> Triple(StatusWarningContainer, StatusWarning, "Yüksek")
-        else -> Triple(Color(0xFFF1F5F2), Color(0xFF5F6D64), "Normal")
+        else -> Triple(StatusNeutralContainer, StatusNeutral, "Normal")
     }
 
     Surface(
