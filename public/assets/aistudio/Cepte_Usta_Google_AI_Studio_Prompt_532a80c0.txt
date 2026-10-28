@@ -1,0 +1,312 @@
+CEPTE USTA — GOOGLE AI STUDIO İÇİN KAPSAMLI ANDROID UYGULAMA PROMPTU
+Sürüm: 1.0
+Dil: Türkçe
+Platform: Android telefon ve tabletlerde uyumlu
+
+ROLÜN
+Kıdemli Android geliştiricisi, ürün tasarımcısı ve UX uzmanı gibi çalış. “Cepte Usta” adlı, gerçek işletmelerin günlük işlerini yönetebileceği, premium görünümlü, hızlı, güvenilir ve eksiksiz bir Android uygulaması oluştur. Yalnızca taslak ekran veya tıklanınca hiçbir şey yapmayan demo üretme. Tüm ana akışlar gerçekten çalışsın; veri kaydetme, düzenleme, silme, arama, filtreleme, raporlama ve dışa aktarma işlevleri uygulansın.
+
+TEMEL AMAÇ
+Cepte Usta; elektrikçi, tesisatçı, tamirci, teknik servis, boya ustası, klima servisi, temizlik hizmeti, marangoz ve benzeri küçük işletmelerin müşterilerini, iş emirlerini, randevularını, tekliflerini, tahsilatlarını, giderlerini ve iş geçmişlerini tek yerden takip etmesini sağlar. Uygulama bir pazar yeri değildir; ilk sürümde müşterileri ustalarla eşleştirme veya çevrim içi hizmet satın alma sistemi oluşturma. İşletmenin kendi işini düzenlemesine odaklan.
+
+ÇOK ÖNEMLİ GELİŞTİRME KURALLARI
+1. Gerçek, derlenebilir bir Android projesi üret. Tercihen Kotlin + Jetpack Compose ve Material 3 kullan. Projenin yapısı temiz, sürdürülebilir ve modüler olsun.
+2. Yapay zekâ özelliği ekleme. Gemini, OpenAI veya başka bir yapay zekâ API'sine bağlanma. Uygulamanın çalışması için ücretli harici bir yapay zekâ servisi gerekmemeli.
+3. Sahte buton, boş ekran, yalnızca görsel amaçlı kontrol, sabit demo verisi veya çalışmayan menü bırakma. Her görünen kontrolün gerçek bir işlevi olsun. Bir özellik ilk sürümde mümkün değilse, bunu açıkça kapsam dışında bırak; çalışıyormuş gibi gösterme.
+4. Uygulama açılışta çökmemeli. Boş durumlar, hatalı girişler, izin reddi, çevrim dışı kullanım ve veri bulunmaması düzgün ele alınmalı.
+5. Veriler uygulama yeniden açıldığında kaybolmamalı. Yerel kalıcı veritabanı kullan (Room/SQLite veya eşdeğeri). Hassas bilgileri gereksiz yere toplama. Yedekleme/dışa aktarma işlemlerinde kullanıcıya açık bilgi ver.
+6. Proje gerçek Android uygulaması olarak tasarlansın; yalnızca tarayıcıda çalışan bir web sitesi veya WebView içine konmuş basit bir sayfa üretme.
+7. Kodda TODO, placeholder, “yakında”, örnek işlev veya boş event handler bırakma. Derleme ve çalışma hatalarını kontrol et.
+8. Türkçe karakterler doğru görüntülensin. Tarih, saat ve para birimi Türkiye kullanımına uygun olsun. Varsayılan para birimi TL (₺), tarih biçimi GG.AA.YYYY olsun. Sayısal işlemlerde kayan nokta hatalarından kaçın; para hesaplarında uygun decimal yaklaşımı kullan.
+9. Uygulama ilk açılışta demo müşteri/iş kaydıyla dolu görünmesin. Kullanıcı isterse “Örnek verileri yükle” seçeneğini ayrıca kullanabilsin.
+10. Bildirim, dosya seçici, kamera, galeri, paylaşım ve izinler Android’in güncel izin kurallarına uygun çalışsın.
+
+MARKA VE TASARIM YÖNÜ
+Sıradan, düz, birbirinin kopyası beyaz kartlardan oluşan bir arayüz yapma. Görsel kalite yüksek, modern, karakterli ve profesyonel olsun. Uygulama bir tasarım ajansının hazırladığı ücretli ürün gibi görünmeli; fakat kullanımı kolay ve gereksiz süslerden arınmış olmalı.
+
+Görsel kimlik:
+- Marka adı: Cepte Usta
+- Ana renk: koyu orman yeşili / zümrüt yeşili
+- Yardımcı renk: canlı lime yeşili veya mint
+- Arka plan: sıcak kırık beyaz; koyu tema için koyu kömür/lacivert-yeşil
+- Metin: yüksek kontrastlı koyu antrasit; ikincil metinler okunabilir gri
+- Durum renkleri: başarı için yeşil, uyarı için amber, hata için kontrollü kırmızı
+- Renkleri her ekrana rastgele dağıtma; merkezi bir tasarım sistemi ve tutarlı token’lar kullan.
+- Açık ve koyu tema desteği ekle. İlk kurulumda sistem temasını izlesin; Ayarlar’dan Açık/Koyu/Sistem seçilebilsin.
+- Yazı tipi modern ve okunaklı olsun. Başlık, bölüm başlığı, gövde ve yardımcı metinler arasında net hiyerarşi kur.
+- Kartlar, butonlar ve giriş alanları dengeli köşelere, tutarlı boşluklara ve hafif derinliğe sahip olsun. Her şeyi aşırı yuvarlatma.
+- İkonlarda tek bir tutarlı çizgi/dolgu stili kullan. Emoji ikon olarak kullanılmasın.
+- Gereksiz gradyan, cam efekti ve yoğun gölge kullanma. Vurgulu alanlarda ölçülü renk geçişleri olabilir.
+- Ekranlar boş, düz ve ruhsuz görünmesin. Ancak her alanı da kartla doldurma.
+- Küçük ekranlarda taşma olmasın; uzun metinler, klavye açıkken formlar ve erişilebilirlik boyutları test edilsin.
+- Butonların basılı, devre dışı, yükleniyor ve hata durumları tasarlansın.
+
+UYGULAMA İKONU — ÖZEL VE PROFESYONEL TASARIM
+Basit bir çekiç emojisi, hazır varsayılan ikon veya yalnızca “CU” harflerinden oluşan özensiz bir ikon yapma.
+- Özgün, kolay tanınan, sade ama güçlü bir vektörel marka sembolü tasarla.
+- Önerilen fikir: kalkan/rozet formu içinde stilize edilmiş anahtar veya çekiç ile onay işaretini birleştiren, geometrik ve dengeli bir sembol. Ayrıntıları küçültülmüş boyutta da seçilebilir olmalı.
+- İkon yeşil tonları ve koyu arka planla uyumlu olsun; yüksek kontrastlı alternatifini de üret.
+- Android adaptive icon için foreground ve background katmanlarını doğru oluştur. Simge, farklı launcher şekillerinde kırpılmadan görünmeli.
+- Uygulama ikonu, açılış ekranı, giriş ekranı ve uygulama içi marka işareti aynı görsel kimliği kullansın.
+- Gerekli Android mipmap/adaptive icon kaynaklarını projeye ekle. Yalnızca ekranda ikon çizmekle yetinme.
+
+AÇILIŞ EKRANI VE ANİMASYON
+Uygulama ilk açıldığında kaliteli ve kısa bir açılış deneyimi sun:
+- Koyu orman yeşili arka plan veya tasarım sistemiyle uyumlu premium bir yüzey.
+- Ortada özgün Cepte Usta sembolü.
+- Sembol için 1–2 saniyelik akıcı animasyon: hafif ölçeklenerek belirme, kısa parlama/çizgi hareketi veya kontrollü bir şekil geçişi. Animasyon profesyonel ve ölçülü olsun; ucuz, zıplayan veya uzun bir animasyon yapma.
+- Logo ve “Cepte Usta” yazısı uyumlu biçimde belirsin; gerekiyorsa kısa bir alt metin kullan: “İşin kontrolü cebinde.”
+- Animasyon bittiğinde ana ekrana doğal geçiş yap. Uygulama her açıldığında uzun tanıtım videosu oynatma; açılış hızlı olmalı.
+- Android splash screen API ile uyumlu çalış. İlk açılış animasyonunu uygulama içinde devam ettir; işletim sistemi açılış ekranı kurallarını bozma.
+- Hareket azaltma/animasyon kapatma tercihini dikkate al ve düşük performanslı cihazlarda akıcı kalmasını sağla.
+
+İLK KURULUM VE İŞLETME PROFİLİ
+İlk açılışta kısa, atlanabilir ama yönlendirici bir kurulum akışı göster:
+1. Hoş geldin ekranı ve uygulamanın ne işe yaradığını anlatan kısa metin.
+2. İşletme adı.
+3. İşletme türü/meslek kategorisi: Elektrik, tesisat, teknik servis, klima, boya, marangoz, temizlik, oto servis, diğer.
+4. Telefon numarası (zorunlu değil).
+5. Adres (zorunlu değil).
+6. İşletme logosu ekleme.
+7. Tema tercihi.
+Kurulum sonradan Ayarlar > İşletme Profili bölümünden düzenlenebilsin. Gereksiz izinleri başlangıçta isteme; izin gerektiği anda açıklayarak iste.
+
+İŞLETME LOGOSU VE MARKALAŞMA — MUTLAKA ÇALIŞSIN
+Kullanıcı kendi işletmesinin logosunu uygulamaya ekleyebilsin:
+- Galeri/dosya seçiciden PNG, JPG veya WebP dosyası seçebilsin.
+- Android Photo Picker veya uygun sistem dosya seçicisini kullan; gereksiz geniş depolama izni isteme.
+- Seçilen görseli daire/kare ön izlemede göster; mümkünse kırpma ve hizalama seçeneği sun.
+- Logo değiştirme ve kaldırma işlemleri çalışsın.
+- Logo uygulama kapatılıp açıldığında kaybolmasın.
+- İşletme logosu ana ekranda profil alanında, PDF tekliflerde ve uygun rapor/çıktılarda görünsün.
+- Logo eklenmemişse tasarımla uyumlu varsayılan işletme simgesi göster.
+- Logonun oranını bozma; görüntüyü esnetme. Büyük görselleri uygulamanın belleğini zorlamayacak şekilde küçült.
+- Logoyu uygulamanın resmi launcher ikonu ile karıştırma. Launcher ikonu Cepte Usta markası olarak sabit kalsın; işletme logosu yalnızca kullanıcının işletme kimliğidir.
+
+ANA NAVİGASYON
+Alt navigasyonda 5 bölüm kullan:
+1. Ana Sayfa
+2. İşler
+3. Ortada belirgin ama şık “+” hızlı işlem butonu
+4. Takvim
+5. Daha Fazla
+Ortadaki hızlı işlem butonu diğerlerinden görsel olarak ayrışsın; yeşil vurgulu, kaliteli bir yüzey ve hafif gölge kullan. Ancak alt navigasyonu gereksiz yüksek yapma. Seçili sekme net biçimde belli olsun. Daha Fazla menüsünde Müşteriler, Teklifler, Gelir-Gider, Raporlar, İşletme Profili ve Ayarlar bulunabilir.
+Navigasyon her ekranda tutarlı olsun. Geri tuşu doğru çalışsın; ekranlar arasında veri kaybı olmasın.
+
+ANA SAYFA / KONTROL PANELİ
+Ana sayfa kişiselleştirilmiş, bilgi yoğunluğu dengeli ve görsel olarak güçlü olsun:
+- Üstte işletme logosu, işletme adı, profil/ayar erişimi ve anlaşılır karşılama alanı.
+- Tarihe göre kısa özet.
+- Bugünkü işler ve yaklaşan randevular.
+- Tamamlanan işler, devam eden işler ve bekleyen işler.
+- Bu ayki tahsilat, bekleyen alacak ve gider özeti.
+- Hızlı işlem kartları: Yeni İş, Yeni Müşteri, Teklif Oluştur, Tahsilat Ekle.
+- Son eklenen işler ve son hareketler.
+- İş bulunmuyorsa açıklayıcı boş durum tasarımı ve “İlk işini ekle” butonu.
+- İstatistikleri gerçek veritabanındaki kayıtlardan hesapla; sabit rakam kullanma.
+- Kartlara dokunulduğunda ilgili detay sayfası açılsın.
+
+İŞ / İŞ EMRİ YÖNETİMİ
+İş kayıtları uygulamanın ana özelliğidir:
+- Yeni iş oluşturma, düzenleme, detay görüntüleme, arşivleme ve silme.
+- İş başlığı, açıklama, müşteri, telefon, adres, kategori, planlanan tarih/saat, tahmini ücret, alınan ödeme, kalan tutar ve not alanları.
+- Durumlar: Yeni, Planlandı, Devam Ediyor, Tamamlandı, İptal Edildi.
+- Öncelik: Normal, Yüksek, Acil.
+- Müşteriyi mevcut listeden seçme veya yeni müşteri ekleme.
+- İşe birden fazla fotoğraf ekleme; fotoğraflar iş detayında görülsün.
+- İş öncesi/sonrası fotoğrafları ayrı kategorilerde saklama.
+- İş geçmişi ve durum değişikliklerini zaman damgasıyla kaydetme.
+- İşler listesinde arama, durum/kategori/tarih filtresi ve sıralama.
+- İş kartlarında durum rozeti, müşteri adı, tarih ve kalan ödeme bilgisi göster.
+- İş tamamlanırken son ücret ve tahsilat bilgisini güncelleme.
+- İptal edilen işlerin raporları bozmasını önle; iptal durumu ayrı hesaplanmalı.
+- Silme işleminde onay iste. Finansal kaydı olan bir iş silinirse kayıt tutarlılığını koru; mümkünse arşivleme öner.
+
+MÜŞTERİ YÖNETİMİ
+- Müşteri ekleme, düzenleme, detay görüntüleme, arşivleme ve silme.
+- Ad soyad veya firma adı, telefon, e-posta (isteğe bağlı), adres (isteğe bağlı), notlar.
+- Aynı telefon numarasıyla olası mükerrer kayıt uyarısı.
+- Müşteri arama ve alfabetik/tarihe göre sıralama.
+- Müşteri detayında tüm iş geçmişi, teklifleri, toplam iş tutarı, toplam tahsilat ve kalan bakiye.
+- Telefon numarasına dokununca Android telefon uygulamasına yönlendir.
+- Adres için harita uygulamasında açma seçeneği sun; harita uygulaması yoksa hata vermeden davran.
+- Müşteriye ait verileri silmeden önce ilişkili iş ve ödeme kayıtları hakkında bilgi ver.
+- Kişisel verileri gereksiz toplama ve dış servislere izinsiz gönderme.
+
+TAKVİM VE RANDEVULAR
+- Gün, hafta ve ay görünümü.
+- İşleri planlanan tarih ve saatlerine göre takvimde göster.
+- Tarihe dokununca o günün işleri listelensin.
+- Yeni randevu/iş oluşturma, düzenleme ve tarih değiştirme.
+- Çakışan randevularda kullanıcıyı uyar; yine de bilinçli olarak devam edebilmesini sağla.
+- Yaklaşan iş hatırlatmaları için yerel bildirim planla.
+- Bildirim iznini yalnızca özellik etkinleştirilirken, açıklayarak iste.
+- Saat dilimini cihaz ayarlarından kullan; tarih değişimlerinde bir gün kayma hatası olmasın.
+
+TEKLİF OLUŞTURMA
+- Müşteri seçerek profesyonel teklif oluştur.
+- Teklif numarası otomatik ve benzersiz oluşturulsun.
+- İşletme adı, logo, iletişim bilgileri ve müşteri bilgileri PDF üzerinde yer alsın.
+- Kalem ekleme: hizmet/ürün adı, miktar, birim fiyat, indirim (isteğe bağlı), ara toplam ve genel toplam.
+- Teklif notu, geçerlilik tarihi ve durum: Taslak, Gönderildi, Kabul Edildi, Reddedildi, Süresi Doldu.
+- Teklif düzenleme, kopyalama, PDF oluşturma ve Android paylaşım menüsüyle paylaşma.
+- PDF Türkçe karakterleri desteklesin ve profesyonel görünsün.
+- PDF oluşturulamazsa kullanıcıya anlaşılır hata mesajı ver.
+- Teklif kabul edildiğinde kullanıcı isterse tekliften iş kaydı oluşturabilsin.
+- Teklifler ekranında arama, filtreleme ve sıralama olsun.
+
+TAHSİLAT, GELİR VE GİDER
+- İşe veya müşteriye bağlı tahsilat ekleme.
+- Nakit, banka/kart ve diğer ödeme yöntemleri.
+- Tarih, tutar, açıklama ve ilgili kayıt alanları.
+- Kısmi ödeme desteklensin; kalan bakiye otomatik hesaplanıp güncellensin.
+- Yanlış tahsilatı düzenleme/iptal etme yetkisi olsun; geçmiş hareketler tutarlı kalsın.
+- Gelir ve gider kaydı oluşturma.
+- Gider kategorileri: Malzeme, Ulaşım, Yakıt, Ekipman, Kira, Fatura, Diğer.
+- Gider tutarı, tarih, açıklama ve isteğe bağlı fotoğraf/belge ekleme.
+- Gelir-gider ekranında tarih aralığı ve kategori filtresi.
+- Tahsilat, gelir ve gider kavramlarını birbirine karıştırma. Bir işin toplam bedeli ile o iş için alınan tahsilat farklı alanlar olarak tutulmalı.
+- Kâr tahmini hesaplanırken kullanılan formülü açıkça göster. Vergi/muhasebe danışmanlığı verdiğini iddia etme.
+- Finansal veriler için kesin ondalık hesaplama ve doğru yuvarlama uygula.
+
+HATIRLATMALAR
+- Yaklaşan randevular.
+- Geciken işler.
+- Teklifin geçerlilik süresinin bitmesi.
+- Kullanıcının belirlediği tahsilat hatırlatmaları.
+- Bildirimler açılıp kapatılabilsin.
+- Bildirim metinleri gizlilik açısından hassas müşteri bilgilerini kilit ekranında gereksiz yere göstermesin.
+- Uygulama bildirim izni reddedildiğinde çökmemeli; alternatif olarak uygulama içi hatırlatma alanı sunmalı.
+
+RAPORLAR VE DIŞA AKTARMA
+- Günlük, haftalık, aylık ve özel tarih aralığı raporları.
+- Tamamlanan iş sayısı, devam eden işler, toplam iş tutarı, tahsilat, kalan alacak, gelir, gider ve tahmini net sonuç.
+- İş kategorilerine göre dağılım.
+- Zaman içindeki gelir/tahsilat grafikleri; okunaklı ve erişilebilir grafikler kullan.
+- Raporları PDF olarak dışa aktar.
+- Uygun listeleri CSV olarak dışa aktar; Türkçe karakterleri doğru kodla.
+- Paylaşım işlemini Android Sharesheet ile yap.
+- Raporlarda işletme adı ve logosu yer alabilsin.
+- Boş tarih aralığında sıfır veya boş durum göster; yanlış veya sabit rakam üretme.
+
+VERİ YEDEĞİ VE GÜVENLİK
+- Kullanıcı verileri varsayılan olarak cihazda kalıcı olarak saklansın.
+- Ayarlarda veri yedeği oluşturma ve yedekten geri yükleme seçeneği sun. Yedek dosyası formatı ve içeriği açıkça anlatılsın.
+- Yedekleme sırasında veri bozulmasına karşı doğrulama yap; geri yükleme öncesinde onay al.
+- Hassas verileri logcat'e yazma.
+- Uygulama içi silme işlemlerinde kullanıcı onayı al.
+- Veritabanı şeması ve migrasyonları düzgün tasarlansın.
+- Bulut senkronizasyonu ilk sürümde uygulanmıyorsa varmış gibi gösterme. İleride eklenebilecek şekilde katmanları ayır.
+- Giriş sistemi/hesap sistemi gerçek bir backend olmadan sahte güvenlik hissi yaratmasın. İlk sürüm yerel profil ile çalışacaksa bunu doğru tasarla ve açıklama metinlerinde bulut hesabı varmış gibi iddia etme.
+- Uygulama verilerinin cihaz değişince otomatik aktarılacağını vaat etme; bunun için yedekleme/geri yükleme akışı sun.
+
+ARAMA VE FİLTRELER
+- İşler, müşteriler, teklifler ve finans hareketlerinde hızlı arama.
+- Liste ekranlarında boş durum, yüklenme durumu, hata durumu ve sonuç bulunamadı durumu.
+- Filtreler kolay sıfırlanabilsin.
+- Kullanıcının seçtiği sıralama ve filtrelerin ekran içinde gereksiz yere kaybolmasını önle.
+
+AYARLAR
+- İşletme profili ve logo yönetimi.
+- Açık/Koyu/Sistem teması.
+- Bildirim tercihleri.
+- Varsayılan para birimi (ilk sürümde TL temel alınsın; farklı para birimi eklenirse her kayıt kendi para birimini korusun).
+- Tarih ve saat tercihleri.
+- Veri yedekleme/geri yükleme.
+- Verileri dışa aktarma.
+- Gizlilik politikası sayfası için gerçek bir bağlantı eklenebilecek alan; URL bilinmiyorsa uydurma URL koyma.
+- Uygulama sürümü ve hakkında sayfası.
+- Kullanım rehberi ve destek iletişimi için sonradan gerçek bilgilerle doldurulabilecek ayar alanları; uydurma e-posta/telefon yazma.
+- Verileri sıfırlama işlemi iki aşamalı onay gerektirsin.
+
+KULLANILABİLİRLİK VE ERİŞİLEBİLİRLİK
+- Dokunma alanları rahat büyüklükte olsun.
+- Metin ve arka plan kontrastı yeterli olsun.
+- Sadece renkle durum anlatma; metin ve ikon da kullan.
+- TalkBack erişilebilirlik açıklamaları ekle.
+- Klavye açıkken formlar kapanmasın ve kaydet butonu erişilebilir kalsın.
+- Formlarda alan doğrulaması ve Türkçe hata mesajları kullan.
+- Kaydetme sırasında çift dokunmayla mükerrer kayıt oluşturulmasını önle.
+- Başarılı işlemler için kısa snackbar/toast göster; hata durumunda çözüm öneren anlaşılır mesaj kullan.
+- Kritik işlemler için onay penceresi göster; her işlemde gereksiz onay sorma.
+- Geri tuşuna basıldığında kaydedilmemiş değişiklik varsa kullanıcıyı uyar.
+- Uygulama yatay/dikey ekranlarda ve farklı Android ekran boyutlarında taşma yapmasın.
+
+MİKRO ETKİLEŞİMLER VE HAREKET
+- Ekran geçişlerinde kısa ve akıcı animasyonlar.
+- Kartlar ve butonlarda kontrollü basılma geri bildirimi.
+- Başarılı kayıt sonrası küçük bir onay animasyonu.
+- Ana ekrandaki önemli rakamlar ilk yüklemede hafifçe belirebilir; uzun sayaç animasyonları kullanma.
+- Yüklenme durumlarında iskelet ekran veya küçük yükleme göstergesi.
+- Animasyonlar iş akışını yavaşlatmasın; düşük güçlü cihazlarda performans korunsun.
+- Her ekrana farklı, tutarsız animasyon koyma.
+
+UYGULAMA İÇİ BOŞ DURUMLAR
+Her bölüm ilk açıldığında boş olabilir. Boş ekranı yalnızca beyaz alan olarak bırakma:
+- İlgili sade bir vektör illüstrasyon veya marka ikon sistemi kullan.
+- Bir cümleyle bölümün ne işe yaradığını açıkla.
+- Birincil eylem butonu göster: “İlk müşterini ekle”, “İlk işini oluştur” gibi.
+- Örnek veri yüklenmediyse gerçek veri varmış gibi istatistik gösterme.
+
+ÖNERİLEN VERİ MODELİ
+En az aşağıdaki varlıkları ve ilişkileri düzgün tasarla:
+- BusinessProfile: işletme adı, kategori, telefon, adres, logo yolu, tema ve tercihler.
+- Customer: isim/firma adı, telefon, e-posta, adres, notlar, oluşturulma tarihi, arşiv durumu.
+- Job: iş numarası, başlık, açıklama, müşteri ilişkisi, kategori, adres, başlangıç/bitiş zamanı, durum, öncelik, tahmini ücret, notlar, oluşturulma tarihi.
+- JobPhoto: iş ilişkisi, dosya yolu, fotoğraf türü, tarih.
+- Quote: teklif numarası, müşteri ilişkisi, tarih, geçerlilik tarihi, durum, not, toplam.
+- QuoteItem: teklif ilişkisi, açıklama, miktar, birim fiyat, indirim ve toplam.
+- Payment: müşteri/iş ilişkisi, tutar, tarih, yöntem, açıklama, durum.
+- Expense: kategori, tutar, tarih, açıklama, dosya yolu.
+- Reminder: tür, ilişkili kayıt, tarih/saat, etkinlik durumu.
+- ActivityLog: önemli durum değişiklikleri ve zaman damgaları.
+Veri ilişkileri, silme davranışları ve migrasyonlar tutarlı olsun. Kimlikler benzersiz olmalı. Para hesaplamaları tek bir merkezi katmandan yürütülmeli.
+
+PERFORMANS VE KOD KALİTESİ
+- Compose ekranlarını küçük ve tekrar kullanılabilir bileşenlere böl.
+- Tema, renkler, tipografi, boşluklar, şekiller ve buton stillerini merkezi tanımla.
+- UI ile veritabanı işlemlerini ayır; Repository/ViewModel veya uygun mimari kullan.
+- Uzun işlemleri ana thread üzerinde çalıştırma.
+- Fotoğrafları tam boy belleğe yükleme; küçültme ve önbellekleme uygula.
+- Liste ekranlarında çok sayıda kayıtta performansı koru.
+- Tarih ve para hesaplarını test et.
+- Mümkünse kritik mantık için birim testleri ekle.
+- Derleme hatalarını, eksik importları ve bozuk kaynak dosyalarını gider.
+- Uygulama açılışı, kayıt ekleme/düzenleme/silme, PDF üretimi, logo seçimi ve yedekleme akışlarını test et.
+
+TESLİM ÖNCESİ ZORUNLU KONTROL LİSTESİ
+Uygulamayı tamamlamadan önce aşağıdakileri tek tek doğrula:
+[ ] Proje gerçek Android projesi ve derlenebilir.
+[ ] Açılış ekranı ve kısa logo animasyonu çalışıyor.
+[ ] Özgün launcher/adaptive icon kaynakları projede var.
+[ ] İşletme logosu galeriden seçilebiliyor, kaydediliyor, değiştiriliyor ve kaldırılabiliyor.
+[ ] Logo ana sayfada ve PDF çıktılarında doğru görünüyor.
+[ ] Müşteri ekleme, düzenleme, arama ve detay sayfası çalışıyor.
+[ ] İş oluşturma, durum değiştirme, fotoğraf ekleme ve filtreleme çalışıyor.
+[ ] Takvim ve randevu hatırlatmaları çalışıyor.
+[ ] Teklif oluşturma, kalem ekleme ve PDF paylaşımı çalışıyor.
+[ ] Tahsilat, kısmi ödeme, bakiye ve gider hesapları doğru.
+[ ] Raporlar gerçek verilerden hesaplanıyor.
+[ ] Veriler uygulama kapatılıp açıldığında korunuyor.
+[ ] Yedekleme ve geri yükleme akışı çalışıyor.
+[ ] Açık/koyu tema tüm ekranlarda tutarlı.
+[ ] Hiçbir buton boş veya işlevsiz değil.
+[ ] Boş durumlar ve hata mesajları düzgün.
+[ ] Uygulama farklı ekran boyutlarında taşmıyor.
+[ ] Türkçe karakterler PDF ve CSV çıktılarında doğru.
+[ ] Sahte veriler ve sabit istatistikler gerçek ekranlardan kaldırılmış.
+[ ] Derleme ve temel akış testleri tamamlanmış.
+
+ÇALIŞMA YÖNTEMİ
+Önce proje mimarisini ve ekran listesini planla; ardından tasarım sistemini, uygulama ikonunu ve açılış ekranını oluştur. Sonra veri modeli ve kalıcı kayıt sistemini kur. Özellikleri modül modül geliştir ve her modülün çalıştığını kontrol et. Sadece ekran tasarımlarını tamamlayıp işi bitmiş sayma. Kod veya bağlam sınırına yaklaşırsan mevcut dosyaları ve çalışan özellikleri koruyarak bir sonraki aşamada devam et; projeyi baştan yazıp çalışan özellikleri bozma.
+
+İLK YANITIN VE SONUÇ BEKLENTİSİ
+Uygulamayı oluşturmaya başla. Önce genel mimariyi ve dosya yapısını belirle, ardından gerçek kodu üret. Herhangi bir özelliği tamamlayamadığında bunu gizleme; hangi kısmın eksik olduğunu ve nedenini açıkça belirt. Son aşamada:
+1. Tamamlanan özellikleri listele.
+2. Çalıştırma ve derleme adımlarını açıkla.
+3. Varsa eksik kalan özellikleri açıkça belirt.
+4. Android APK/AAB oluşturmak için gereken gerçek proje ve yapılandırma dosyalarını hazırla.
+5. Gerçekten test etmediğin bir özelliği test edilmiş gibi iddia etme.
+
+SON TASARIM HEDEFİ
+Cepte Usta ilk bakışta kaliteli, güvenilir, modern ve profesyonel görünmeli. Kullanıcı uygulamayı açtığında sade ama ruhsuz bir şablon değil, kendine ait görsel kimliği olan gerçek bir ürün görmeli. Görsellik ile işlevsellik dengeli olmalı; logo, açılış animasyonu, dashboard, kartlar, grafikler, ikonlar ve mikro etkileşimler aynı tasarım diliyle hazırlanmalı. En önemli öncelik: güzel görünmesinin yanında gerçek iş akışlarının eksiksiz ve güvenilir biçimde çalışması.
