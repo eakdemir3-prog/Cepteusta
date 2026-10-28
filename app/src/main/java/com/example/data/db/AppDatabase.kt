@@ -1,5 +1,7 @@
 package com.example.data.db
 
+import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.room.migration.Migration
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -33,7 +35,7 @@ import com.example.data.model.QuoteItem
         Expense::class,
         ActivityLog::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -49,6 +51,14 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        /** v2: işlere tamamlanma tarihi eklendi (mevcut tamamlanmış işlere oluşturma tarihi yazılır). */
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE jobs ADD COLUMN completedAt INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("UPDATE jobs SET completedAt = createdAt WHERE status = 'TAMAMLANDI'")
+            }
+        }
+
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -56,6 +66,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "ustaca.db"
                 )
+                    .addMigrations(MIGRATION_1_2)
                     // Şema değişirse veriyi silmek yerine Migration eklenmeli (kullanıcı verisi korunur).
                     .build()
                 INSTANCE = instance

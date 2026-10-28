@@ -142,10 +142,11 @@ class CepteUstaRepository(private val db: AppDatabase) {
     }
 
     suspend fun saveJob(job: Job): Long = withContext(Dispatchers.IO) {
-        val finalJob = if (job.jobCode.isBlank()) {
+        val coded = if (job.jobCode.isBlank()) {
             val count = jobDao.getAllJobsWithCustomerFlow().first().size + 1
             job.copy(jobCode = "IS-${1000 + count}")
         } else job
+        val finalJob = withCompletion(coded, if (job.id != 0L) jobDao.getJobById(job.id) else null)
         val id = jobDao.insert(finalJob)
         val action = if (job.id == 0L) "Yeni İş Oluşturuldu" else "İş Güncellendi"
         logActivity(action, "${finalJob.jobCode}: ${finalJob.title}", "JOB", if (job.id == 0L) id else job.id)
@@ -154,13 +155,27 @@ class CepteUstaRepository(private val db: AppDatabase) {
 
     suspend fun updateJobStatus(jobId: Long, newStatus: String, finalPrice: Double? = null) = withContext(Dispatchers.IO) {
         val job = jobDao.getJobById(jobId) ?: return@withContext
-        val updated = if (finalPrice != null) {
+        val changed = if (finalPrice != null) {
             job.copy(status = newStatus, finalPrice = finalPrice)
         } else {
             job.copy(status = newStatus)
         }
-        jobDao.update(updated)
+        jobDao.update(withCompletion(changed, job))
         logActivity("İş Durumu Değişti", "${job.jobCode} durumu: ${JobStatus.getLabel(newStatus)}", "JOB", jobId)
+    }
+
+    /** Tamamlandı'ya geçince tamamlanma anını yazar, geri alınınca sıfırlar. */
+    private fun withCompletion(job: Job, previous: Job?): Job = when {
+        job.status != JobStatus.COMPLETED -> job.copy(completedAt = 0L)
+        job.completedAt > 0L -> job
+        previous != null && previous.status == JobStatus.COMPLETED && previous.completedAt > 0L ->
+            job.copy(completedAt = previous.completedAt)
+        else -> job.copy(completedAt = System.currentTimeMillis())
+    }
+
+    /** Geçerlilik tarihi geçen taslak/gönderilmiş teklifleri "Süresi Doldu" yapar. */
+    suspend fun expireOldQuotes() = withContext(Dispatchers.IO) {
+        quoteDao.expireOldQuotes(System.currentTimeMillis())
     }
 
     suspend fun deleteJob(jobId: Long) = withContext(Dispatchers.IO) {
@@ -306,7 +321,10 @@ class CepteUstaRepository(private val db: AppDatabase) {
 
             val todayJobs = jobs.count { it.scheduledDate in todayStart..todayEnd }
             val inProgress = jobs.count { it.status == JobStatus.IN_PROGRESS }
-            val completedThisMonth = jobs.count { it.status == JobStatus.COMPLETED && it.createdAt >= monthStart }
+            val completedThisMonth = jobs.count {
+                it.status == JobStatus.COMPLETED &&
+                    (if (it.completedAt > 0L) it.completedAt else it.createdAt) >= monthStart
+            }
             val pending = jobs.count { it.status == JobStatus.NEW || it.status == JobStatus.SCHEDULED }
 
             val collectedMonth = payments.filter { it.date >= monthStart }.sumOf { it.amount }
@@ -393,6 +411,7 @@ class CepteUstaRepository(private val db: AppDatabase) {
                 put("finalPrice", j.finalPrice)
                 put("notes", j.notes)
                 put("createdAt", j.createdAt)
+                put("completedAt", j.completedAt)
             })
         }
         root.put("jobs", jobsArray)
@@ -495,7 +514,8 @@ class CepteUstaRepository(private val db: AppDatabase) {
                     estimatedPrice = j.optDouble("estimatedPrice", 0.0),
                     finalPrice = j.optDouble("finalPrice", 0.0),
                     notes = j.optString("notes", ""),
-                    createdAt = j.optLong("createdAt", System.currentTimeMillis())
+                    createdAt = j.optLong("createdAt", System.currentTimeMillis()),
+                    completedAt = j.optLong("completedAt", 0L)
                 )
                 val newJobId = jobDao.insert(newJob)
                 oldToNewJobId[oldJobId] = newJobId

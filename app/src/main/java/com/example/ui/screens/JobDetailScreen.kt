@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.util.PdfExportUtil
+import com.example.data.model.BusinessProfile
 import android.content.Intent
 import com.example.util.WhatsAppUtil
 import com.example.ui.components.WhatsAppTemplate
@@ -113,6 +115,9 @@ fun JobDetailScreen(
     var bundle by remember { mutableStateOf<JobDetailBundle?>(null) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var selectedPhotoCategory by remember { mutableStateOf("ONCE") } // ONCE, SONRA
+    val pdfProfile by produceState<BusinessProfile?>(initialValue = null) {
+        value = runCatching { repository.getProfile() }.getOrNull()
+    }
     val businessName by produceState(initialValue = "") {
         value = runCatching { repository.getProfile().businessName }.getOrDefault("")
     }
@@ -538,11 +543,31 @@ fun JobDetailScreen(
                                         style = MaterialTheme.typography.labelSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
-                                    Text(
-                                        text = Formatters.formatCurrency(pay.amount, currencySymbol),
-                                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                                        color = StatusSuccess
-                                    )
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Text(
+                                            text = Formatters.formatCurrency(pay.amount, currencySymbol),
+                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                            color = StatusSuccess
+                                        )
+                                        val receiptProfile = pdfProfile
+                                        if (receiptProfile != null) {
+                                            Spacer(modifier = Modifier.width(6.dp))
+                                            Text(
+                                                text = "Makbuz",
+                                                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                                                color = ForestGreenPrimary,
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(6.dp))
+                                                    .clickable {
+                                                        val file = PdfExportUtil.generatePaymentReceiptPdf(
+                                                            context, receiptProfile, customer, pay, job
+                                                        )
+                                                        if (file != null) PdfExportUtil.shareFile(context, file, title = "Makbuzu Paylaş")
+                                                    }
+                                                    .padding(horizontal = 6.dp, vertical = 2.dp)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

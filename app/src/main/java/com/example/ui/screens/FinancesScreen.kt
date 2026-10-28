@@ -1,5 +1,7 @@
 package com.example.ui.screens
 
+import com.example.data.model.JobWithCustomer
+import com.example.data.model.BusinessProfile
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -71,11 +73,14 @@ fun FinancesScreen(
     onAddExpense: () -> Unit,
     onDeletePayment: (Long) -> Unit,
     onDeleteExpense: (Long) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    profile: BusinessProfile? = null,
+    jobs: List<JobWithCustomer> = emptyList()
 ) {
     val context = LocalContext.current
     var selectedTab by remember { mutableStateOf(0) } // 0: Tahsilatlar, 1: Giderler
     val customerMap = remember(customers) { customers.associateBy { it.id } }
+    val jobMap = remember(jobs) { jobs.associate { it.job.id to it.job } }
 
     val totalCollected = payments.sumOf { it.amount }
     val totalExpense = expenses.sumOf { it.amount }
@@ -273,6 +278,16 @@ fun FinancesScreen(
                                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
                                             color = StatusSuccess
                                         )
+                                        if (profile != null && customer != null) {
+                                            IconButton(onClick = {
+                                                val file = PdfExportUtil.generatePaymentReceiptPdf(
+                                                    context, profile, customer, pay, pay.jobId?.let { jobMap[it] }
+                                                )
+                                                if (file != null) PdfExportUtil.shareFile(context, file, title = "Makbuzu Paylaş")
+                                            }) {
+                                                Icon(Icons.Default.Receipt, contentDescription = "Makbuz", tint = ForestGreenPrimary, modifier = Modifier.size(20.dp))
+                                            }
+                                        }
                                         IconButton(onClick = {
                                             itemToDeleteType = "PAYMENT"
                                             itemToDeleteId = pay.id

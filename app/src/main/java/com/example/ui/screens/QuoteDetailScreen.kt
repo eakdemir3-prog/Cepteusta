@@ -194,7 +194,7 @@ fun QuoteDetailScreen(
                                 items = items
                             )
                             if (pdfFile != null) {
-                                PdfExportUtil.shareFile(context, pdfFile)
+                                PdfExportUtil.shareFile(context, pdfFile, title = "Teklifi Paylaş")
                             } else {
                                 Toast.makeText(context, "PDF oluşturulamadı", Toast.LENGTH_SHORT).show()
                             }

@@ -1,0 +1,59 @@
+name: Android Derleme (AAB + APK)
+
+# "build-*" etiketi gönderilince derler ve çıktıları ön sürüm (pre-release) olarak ekler.
+# Not: Buradaki imza geçicidir; Play'e yüklenecek dosya Ustaca yükleme anahtarıyla yeniden imzalanır.
+on:
+  workflow_dispatch:
+  push:
+    tags: ['build-*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+
+      - name: Geçici CI imza anahtarı
+        run: |
+          keytool -genkeypair -noprompt -keystore "$RUNNER_TEMP/ci.jks" -alias upload \
+            -keyalg RSA -keysize 2048 -validity 1000 \
+            -storepass ci-temp-pass -keypass ci-temp-pass -dname "CN=Ustaca CI"
+          keytool -genkeypair -noprompt -keystore "$GITHUB_WORKSPACE/debug.keystore" -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 1000 \
+            -storepass android -keypass android -dname "CN=Android Debug"
+
+      - name: Derle
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/ci.jks
+          STORE_PASSWORD: ci-temp-pass
+          KEY_PASSWORD: ci-temp-pass
+        run: gradle :app:bundleRelease :app:assembleRelease --stacktrace --no-daemon
+
+      - name: Çıktıları hazırla
+        run: |
+          mkdir -p out
+          cp app/build/outputs/bundle/release/*.aab out/ustaca-unsigned.aab
+          cp app/build/outputs/apk/release/*.apk out/ustaca-unsigned.apk
+          ls -la out
+
+      - name: Ön sürüm olarak ekle
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          prerelease: true
+          name: "Derleme ${{ github.ref_name }}"
+          body: "Otomatik derleme (geçici imzalı). Play'e yüklenecek dosya değildir."
+          files: out/*

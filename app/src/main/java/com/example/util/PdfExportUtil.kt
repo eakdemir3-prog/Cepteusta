@@ -12,6 +12,9 @@ import android.graphics.pdf.PdfDocument
 import androidx.core.content.FileProvider
 import com.example.data.model.BusinessProfile
 import com.example.data.model.Customer
+import com.example.data.model.Job
+import com.example.data.model.Payment
+import com.example.data.model.PaymentMethod
 import com.example.data.model.Quote
 import com.example.data.model.QuoteItem
 import java.io.File
@@ -36,7 +39,7 @@ object PdfExportUtil {
 
             // Paints
             val primaryPaint = Paint().apply {
-                color = Color.parseColor("#0F4D33")
+                color = Color.parseColor("#0F766E")
                 isAntiAlias = true
             }
             val accentPaint = Paint().apply {
@@ -44,17 +47,17 @@ object PdfExportUtil {
                 isAntiAlias = true
             }
             val textDark = Paint().apply {
-                color = Color.parseColor("#1A221E")
+                color = Color.parseColor("#172033")
                 textSize = 12f
                 isAntiAlias = true
             }
             val textMuted = Paint().apply {
-                color = Color.parseColor("#5F6D64")
+                color = Color.parseColor("#64748B")
                 textSize = 10f
                 isAntiAlias = true
             }
             val textTitle = Paint().apply {
-                color = Color.parseColor("#0F4D33")
+                color = Color.parseColor("#0F766E")
                 textSize = 20f
                 isFakeBoldText = true
                 isAntiAlias = true
@@ -66,7 +69,7 @@ object PdfExportUtil {
                 isAntiAlias = true
             }
             val linePaint = Paint().apply {
-                color = Color.parseColor("#E0E6E2")
+                color = Color.parseColor("#E5EAF0")
                 strokeWidth = 1f
             }
 
@@ -98,7 +101,7 @@ object PdfExportUtil {
             canvas.drawText(profile.businessName, textOffsetLeft, 40f, bannerTitle)
 
             val bannerSub = Paint().apply {
-                color = Color.parseColor("#D1F2DF")
+                color = Color.parseColor("#CCFBF1")
                 textSize = 11f
                 isAntiAlias = true
             }
@@ -115,7 +118,7 @@ object PdfExportUtil {
             canvas.drawText("FİYAT TEKLİFİ", pageWidth - 32f, 40f, quoteBadgePaint)
 
             val quoteNoPaint = Paint().apply {
-                color = Color.parseColor("#D1F2DF")
+                color = Color.parseColor("#CCFBF1")
                 textSize = 11f
                 textAlign = Paint.Align.RIGHT
                 isAntiAlias = true
@@ -134,14 +137,14 @@ object PdfExportUtil {
 
             // Left: Sayın Müşteri
             val sectionHeaderPaint = Paint().apply {
-                color = Color.parseColor("#0F4D33")
+                color = Color.parseColor("#0F766E")
                 textSize = 11f
                 isFakeBoldText = true
                 isAntiAlias = true
             }
             canvas.drawText("SAYIN / MÜŞTERİ BİLGİLERİ", 44f, yPos + 20f, sectionHeaderPaint)
             val custNamePaint = Paint().apply {
-                color = Color.parseColor("#1A221E")
+                color = Color.parseColor("#172033")
                 textSize = 13f
                 isFakeBoldText = true
                 isAntiAlias = true
@@ -163,7 +166,7 @@ object PdfExportUtil {
 
             // Items Table Header
             val thBg = Paint().apply {
-                color = Color.parseColor("#0F4D33")
+                color = Color.parseColor("#0F766E")
             }
             canvas.drawRoundRect(RectF(32f, yPos, pageWidth - 32f, yPos + 26f), 4f, 4f, thBg)
             canvas.drawText("#", 42f, yPos + 17f, textHeader)
@@ -200,12 +203,12 @@ object PdfExportUtil {
             canvas.drawRoundRect(RectF(totalBoxLeft, yPos, totalBoxRight, yPos + 55f), 6f, 6f, boxPaint)
 
             val totalLabelPaint = Paint().apply {
-                color = Color.parseColor("#1A221E")
+                color = Color.parseColor("#172033")
                 textSize = 11f
                 isAntiAlias = true
             }
             val totalValuePaint = Paint().apply {
-                color = Color.parseColor("#0F4D33")
+                color = Color.parseColor("#0F766E")
                 textSize = 15f
                 isFakeBoldText = true
                 textAlign = Paint.Align.RIGHT
@@ -231,7 +234,7 @@ object PdfExportUtil {
             val footerY = pageHeight - 40f
             canvas.drawLine(32f, footerY - 10f, pageWidth - 32f, footerY - 10f, linePaint)
             val footerPaint = Paint().apply {
-                color = Color.parseColor("#7A8B80")
+                color = Color.parseColor("#94A3B8")
                 textSize = 9f
                 isAntiAlias = true
             }
@@ -257,7 +260,137 @@ object PdfExportUtil {
         }
     }
 
-    fun shareFile(context: Context, file: File, mimeType: String = "application/pdf") {
+    /** Tahsilat makbuzu (A5 boyutunda, tek sayfa). */
+    fun generatePaymentReceiptPdf(
+        context: Context,
+        profile: BusinessProfile,
+        customer: Customer,
+        payment: Payment,
+        job: Job?
+    ): File? {
+        return try {
+            val document = PdfDocument()
+            val w = 420
+            val h = 595
+            val page = document.startPage(PdfDocument.PageInfo.Builder(w, h, 1).create())
+            val c = page.canvas
+
+            val ink = Color.parseColor("#0F766E")
+            val banner = Paint().apply { color = ink; isAntiAlias = true }
+            val white = Paint().apply { color = Color.WHITE; textSize = 15f; isFakeBoldText = true; isAntiAlias = true }
+            val whiteSub = Paint().apply { color = Color.parseColor("#CCFBF1"); textSize = 9.5f; isAntiAlias = true }
+            val whiteRight = Paint().apply {
+                color = Color.WHITE; textSize = 13f; isFakeBoldText = true; textAlign = Paint.Align.RIGHT; isAntiAlias = true
+            }
+            val whiteRightSub = Paint().apply {
+                color = Color.parseColor("#CCFBF1"); textSize = 9.5f; textAlign = Paint.Align.RIGHT; isAntiAlias = true
+            }
+            val label = Paint().apply { color = Color.parseColor("#64748B"); textSize = 9.5f; isAntiAlias = true }
+            val value = Paint().apply { color = Color.parseColor("#172033"); textSize = 11.5f; isAntiAlias = true }
+            val valueBold = Paint().apply { color = Color.parseColor("#172033"); textSize = 11.5f; isFakeBoldText = true; isAntiAlias = true }
+            val amountPaint = Paint().apply { color = ink; textSize = 24f; isFakeBoldText = true; isAntiAlias = true }
+            val line = Paint().apply { color = Color.parseColor("#E5EAF0"); strokeWidth = 1f }
+            val boxPaint = Paint().apply { color = Color.parseColor("#ECFDF5"); isAntiAlias = true }
+
+            c.drawRect(0f, 0f, w.toFloat(), 78f, banner)
+            c.drawText(profile.businessName, 24f, 34f, white)
+            val sub = listOf(profile.category, profile.phone).filter { it.isNotBlank() }.joinToString(" • ")
+            if (sub.isNotBlank()) c.drawText(sub, 24f, 52f, whiteSub)
+            c.drawText("TAHSİLAT MAKBUZU", w - 24f, 34f, whiteRight)
+            c.drawText("No: TM-${payment.id}", w - 24f, 52f, whiteRightSub)
+
+            var y = 110f
+            fun row(l: String, v: String, bold: Boolean = false) {
+                c.drawText(l, 24f, y, label)
+                y += 15f
+                c.drawText(v, 24f, y, if (bold) valueBold else value)
+                y += 22f
+            }
+
+            row("Tarih", Formatters.formatDateTime(payment.date))
+            row("Ödemeyi Yapan", customer.name, bold = true)
+            if (customer.phone.isNotBlank()) row("Telefon", customer.phone)
+            if (job != null) row("İş", listOf(job.jobCode, job.title).filter { it.isNotBlank() }.joinToString(" - "))
+            row("Ödeme Şekli", PaymentMethod.getLabel(payment.paymentMethod))
+            if (payment.description.isNotBlank()) row("Açıklama", payment.description)
+
+            y += 4f
+            c.drawRoundRect(RectF(24f, y, w - 24f, y + 78f), 10f, 10f, boxPaint)
+            c.drawText("Alınan Tutar", 38f, y + 22f, label)
+            c.drawText(Formatters.formatCurrency(payment.amount, profile.currencySymbol), 38f, y + 50f, amountPaint)
+            val words = Paint().apply { color = Color.parseColor("#0F766E"); textSize = 9f; isAntiAlias = true }
+            c.drawText("Yalnız: ${amountToTurkishWords(payment.amount)}", 38f, y + 68f, words)
+            y += 110f
+
+            c.drawLine(w - 170f, y + 30f, w - 24f, y + 30f, line)
+            c.drawText("Teslim Alan / İmza", w - 170f, y + 44f, label)
+
+            val footerY = h - 34f
+            c.drawLine(24f, footerY - 12f, w - 24f, footerY - 12f, line)
+            val footer = Paint().apply { color = Color.parseColor("#94A3B8"); textSize = 8f; isAntiAlias = true }
+            c.drawText("Bu makbuz Ustaca uygulaması ile hazırlanmıştır. Resmi fatura yerine geçmez.", 24f, footerY, footer)
+            val contact = listOf(profile.phone, profile.address).filter { it.isNotBlank() }.joinToString(" • ")
+            if (contact.isNotBlank()) c.drawText(contact, 24f, footerY + 12f, footer)
+
+            document.finishPage(page)
+            val dir = File(context.cacheDir, "receipts")
+            if (!dir.exists()) dir.mkdirs()
+            val file = File(dir, "Makbuz_TM-${payment.id}.pdf")
+            FileOutputStream(file).use { document.writeTo(it) }
+            document.close()
+            file
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    /** 1250.50 -> "Bin İki Yüz Elli Türk Lirası Elli Kuruş" */
+    fun amountToTurkishWords(amount: Double): String {
+        val totalKurus = Math.round(amount * 100)
+        val lira = totalKurus / 100
+        val kurus = (totalKurus % 100).toInt()
+        val liraText = if (lira == 0L) "Sıfır" else numberToWords(lira)
+        return buildString {
+            append("$liraText Türk Lirası")
+            if (kurus > 0) append(" ${numberToWords(kurus.toLong())} Kuruş")
+        }
+    }
+
+    private fun numberToWords(n: Long): String {
+        val ones = listOf("", "Bir", "İki", "Üç", "Dört", "Beş", "Altı", "Yedi", "Sekiz", "Dokuz")
+        val tens = listOf("", "On", "Yirmi", "Otuz", "Kırk", "Elli", "Altmış", "Yetmiş", "Seksen", "Doksan")
+        fun hundreds(x: Int): String {
+            val h = x / 100
+            val t = (x % 100) / 10
+            val o = x % 10
+            val parts = mutableListOf<String>()
+            if (h > 0) parts.add(if (h == 1) "Yüz" else "${ones[h]} Yüz")
+            if (t > 0) parts.add(tens[t])
+            if (o > 0) parts.add(ones[o])
+            return parts.joinToString(" ")
+        }
+        val scales = listOf("", "Bin", "Milyon", "Milyar", "Trilyon")
+        var rest = n
+        var i = 0
+        val groups = mutableListOf<String>()
+        while (rest > 0 && i < scales.size) {
+            val g = (rest % 1000).toInt()
+            if (g > 0) {
+                val text = when {
+                    i == 1 && g == 1 -> "Bin"
+                    scales[i].isEmpty() -> hundreds(g)
+                    else -> "${hundreds(g)} ${scales[i]}"
+                }
+                groups.add(0, text)
+            }
+            rest /= 1000
+            i++
+        }
+        return groups.joinToString(" ")
+    }
+
+    fun shareFile(context: Context, file: File, mimeType: String = "application/pdf", title: String = "Paylaş") {
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.fileprovider",
@@ -269,7 +402,7 @@ object PdfExportUtil {
             putExtra(Intent.EXTRA_SUBJECT, file.name)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        val chooser = Intent.createChooser(shareIntent, "Teklifi Paylaş")
+        val chooser = Intent.createChooser(shareIntent, title)
         chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(chooser)
     }

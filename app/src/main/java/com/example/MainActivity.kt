@@ -438,7 +438,9 @@ fun MainAppNavigation(viewModel: MainViewModel, profile: BusinessProfile) {
                         onAddExpense = { navController.navigate(NavRoutes.ADD_EXPENSE) },
                         onDeletePayment = { viewModel.deletePayment(it) },
                         onDeleteExpense = { viewModel.deleteExpense(it) },
-                        onBack = { navController.popBackStack() }
+                        onBack = { navController.popBackStack() },
+                        profile = profile,
+                        jobs = jobs
                     )
                 }
 

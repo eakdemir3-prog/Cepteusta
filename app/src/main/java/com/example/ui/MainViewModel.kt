@@ -143,6 +143,9 @@ class MainViewModel(private val repository: CepteUstaRepository) : ViewModel() {
     val reminderMinutes: StateFlow<Int> = _reminderMinutes.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            runCatching { repository.expireOldQuotes() }
+        }
         appContext?.let { ctx ->
             viewModelScope.launch(Dispatchers.Default) {
                 var previousIds = emptySet<Long>()

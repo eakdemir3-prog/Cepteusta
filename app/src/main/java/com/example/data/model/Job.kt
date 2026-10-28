@@ -1,5 +1,6 @@
 package com.example.data.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -63,7 +64,9 @@ data class Job(
     val finalPrice: Double = 0.0,
     val notes: String = "",
     val isArchived: Boolean = false,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    /** İşin "Tamamlandı" yapıldığı an (0 = tamamlanmadı). */
+    @ColumnInfo(defaultValue = "0") val completedAt: Long = 0L
 )
 
 @Entity(

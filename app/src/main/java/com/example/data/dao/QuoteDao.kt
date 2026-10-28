@@ -40,6 +40,9 @@ interface QuoteDao {
     @Query("UPDATE quotes SET status = :status WHERE id = :id")
     suspend fun updateStatus(id: Long, status: String)
 
+    @Query("UPDATE quotes SET status = 'SURESI_DOLDU' WHERE status IN ('TASLAK', 'GONDERILDI') AND validUntilDate > 0 AND validUntilDate < :now")
+    suspend fun expireOldQuotes(now: Long): Int
+
     // Items
     @Query("SELECT * FROM quote_items WHERE quoteId = :quoteId ORDER BY id ASC")
     fun getItemsForQuote(quoteId: Long): Flow<List<QuoteItem>>
