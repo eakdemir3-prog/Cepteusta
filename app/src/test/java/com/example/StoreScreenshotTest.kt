@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.activity.ComponentActivity
+import android.graphics.Canvas
+import android.view.View
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.captureToImage
 import com.example.data.model.JobStatus
 import com.example.data.repository.CepteUstaRepository
 import com.example.ui.components.CepteUstaBottomNavBar
@@ -45,7 +45,7 @@ import java.io.File
 class StoreScreenshotTest {
 
     @get:Rule
-    val compose = createComposeRule()
+    val compose = createAndroidComposeRule<ComponentActivity>()
 
     private lateinit var repo: CepteUstaRepository
 
@@ -74,7 +74,10 @@ class StoreScreenshotTest {
         }
         compose.mainClock.advanceTimeBy(1_500)
         compose.waitForIdle()
-        val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+        // Yazılımsal çizim: Robolectric'te captureToImage'in çizim beklemesi zaman aşımına uğruyor
+        val view = compose.activity.findViewById<View>(android.R.id.content)
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        view.draw(Canvas(bitmap))
         val dir = File(System.getProperty("user.dir"), "build/store-shots").apply { mkdirs() }
         File(dir, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
