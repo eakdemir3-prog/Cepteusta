@@ -1,5 +1,9 @@
 package com.example.ui.screens
 
+import com.example.reminder.ReminderScheduler
+import com.example.BuildConfig
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,11 +45,14 @@ import com.example.ui.theme.ForestGreenContainer
 import com.example.ui.theme.ForestGreenOnContainer
 import com.example.ui.theme.ForestGreenPrimary
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(
     profile: BusinessProfile,
     onUpdateTheme: (String) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    reminderMinutes: Int = 0,
+    onUpdateReminder: (Int) -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -115,6 +122,47 @@ fun SettingsScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Randevu hatırlatma
+            Card(
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Randevu Hatırlatma",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "Planlı işlerden önce telefonunuza bildirim gelsin.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        ReminderScheduler.OPTIONS.forEach { (minutes, label) ->
+                            FilterChip(
+                                selected = reminderMinutes == minutes,
+                                onClick = { onUpdateReminder(minutes) },
+                                label = { Text(label, fontSize = 12.sp) },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = ForestGreenContainer,
+                                    selectedLabelColor = ForestGreenOnContainer
+                                ),
+                                modifier = Modifier.testTag("reminder_chip_$minutes")
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             // Currency & Regional Setting
             Card(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -172,7 +220,7 @@ fun SettingsScreen(
                         color = ForestGreenPrimary
                     )
                     Text(
-                        text = "Sürüm 1.0 (Android)",
+                        text = "Sürüm ${BuildConfig.VERSION_NAME} • EA Vision Labs",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

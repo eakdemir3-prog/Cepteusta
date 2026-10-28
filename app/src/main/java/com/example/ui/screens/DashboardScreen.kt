@@ -87,7 +87,8 @@ fun DashboardScreen(
     onNewQuote: () -> Unit,
     onAddPayment: () -> Unit,
     onSeeAllJobs: () -> Unit,
-    onProfileClick: () -> Unit
+    onProfileClick: () -> Unit,
+    onReceivablesClick: () -> Unit = {}
 ) {
     val todayStart = Formatters.getTodayStartMillis()
     val todayEnd = Formatters.getTodayEndMillis()
@@ -201,7 +202,8 @@ fun DashboardScreen(
                             title = "Kalan Alacak",
                             amount = Formatters.formatCurrency(stats.totalPendingReceivable, profile.currencySymbol),
                             tint = StatusWarning,
-                            icon = Icons.Default.Schedule
+                            icon = Icons.Default.Schedule,
+                            onClick = onReceivablesClick
                         )
                     }
                 }
@@ -440,9 +442,10 @@ private fun FinanceStatItem(
     title: String,
     amount: String,
     tint: Color,
-    icon: ImageVector
+    icon: ImageVector,
+    onClick: (() -> Unit)? = null
 ) {
-    Column {
+    Column(modifier = if (onClick != null) Modifier.clickable { onClick() } else Modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(imageVector = icon, contentDescription = null, tint = tint, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.width(4.dp))

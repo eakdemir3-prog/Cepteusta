@@ -1,5 +1,8 @@
 package com.example.ui
 
+import kotlinx.coroutines.Dispatchers
+import com.example.reminder.ReminderScheduler
+import com.example.CepteUstaApp
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -131,6 +134,36 @@ class MainViewModel(private val repository: CepteUstaRepository) : ViewModel() {
     // Quick action sheet state
     private val _showQuickActionSheet = MutableStateFlow(false)
     val showQuickActionSheet: StateFlow<Boolean> = _showQuickActionSheet.asStateFlow()
+
+    // Randevu hatırlatmaları: iş listesi her değiştiğinde bildirimler güncellenir
+    private val appContext: Context? = runCatching { CepteUstaApp.instance.applicationContext }.getOrNull()
+    private val _reminderMinutes = MutableStateFlow(
+        appContext?.let { ReminderScheduler.getMinutesBefore(it) } ?: ReminderScheduler.DEFAULT_MINUTES
+    )
+    val reminderMinutes: StateFlow<Int> = _reminderMinutes.asStateFlow()
+
+    init {
+        appContext?.let { ctx ->
+            viewModelScope.launch(Dispatchers.Default) {
+                var previousIds = emptySet<Long>()
+                repository.allJobsWithCustomer.collect { list ->
+                    val ids = list.map { it.job.id }.toSet()
+                    (previousIds - ids).forEach { ReminderScheduler.cancel(ctx, it) }
+                    ReminderScheduler.syncAll(ctx, list)
+                    previousIds = ids
+                }
+            }
+        }
+    }
+
+    fun setReminderMinutes(minutes: Int) {
+        val ctx = appContext ?: return
+        ReminderScheduler.setMinutesBefore(ctx, minutes)
+        _reminderMinutes.value = minutes
+        viewModelScope.launch(Dispatchers.Default) {
+            ReminderScheduler.syncAll(ctx, jobs.value)
+        }
+    }
 
     fun setQuickActionSheet(show: Boolean) {
         _showQuickActionSheet.value = show

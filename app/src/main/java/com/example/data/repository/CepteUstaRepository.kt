@@ -96,7 +96,9 @@ class CepteUstaRepository(private val db: AppDatabase) {
         ) { cust, jobs, quotes, payments ->
             if (cust == null) null
             else {
-                val totalBilled = jobs.sumOf { if (it.finalPrice > 0) it.finalPrice else it.estimatedPrice }
+                // İptal edilen işler borç sayılmaz (ana sayfadaki alacak hesabıyla aynı)
+                val totalBilled = jobs.filter { it.status != JobStatus.CANCELLED }
+                    .sumOf { if (it.finalPrice > 0) it.finalPrice else it.estimatedPrice }
                 val totalPaid = payments.sumOf { it.amount }
                 val balance = totalBilled - totalPaid
                 CustomerWithDetails(

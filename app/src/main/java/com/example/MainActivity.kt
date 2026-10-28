@@ -1,5 +1,12 @@
 package com.example
 
+import com.example.reminder.ReminderScheduler
+import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
+import android.os.Build
+import android.content.pm.PackageManager
+import android.Manifest
+import com.example.ui.screens.ReceivablesScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -74,6 +81,7 @@ object NavRoutes {
     const val BUSINESS_PROFILE = "business_profile"
     const val BACKUP_SETTINGS = "backup_settings"
     const val SETTINGS = "settings"
+    const val RECEIVABLES = "receivables"
 }
 
 class MainActivity : ComponentActivity() {
@@ -82,9 +90,19 @@ class MainActivity : ComponentActivity() {
         MainViewModel.factory(CepteUstaApp.instance.repository)
     }
 
+    // Android 13+: randevu hatırlatmaları için bildirim izni
+    private val notificationPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        ReminderScheduler.createChannel(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         setContent {
             val profile by viewModel.profile.collectAsStateWithLifecycle()
@@ -118,6 +136,7 @@ fun MainAppNavigation(viewModel: MainViewModel, profile: BusinessProfile) {
     val payments by viewModel.payments.collectAsStateWithLifecycle()
     val expenses by viewModel.expenses.collectAsStateWithLifecycle()
     val recentActivity by viewModel.recentActivity.collectAsStateWithLifecycle()
+    val reminderMinutes by viewModel.reminderMinutes.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -201,7 +220,8 @@ fun MainAppNavigation(viewModel: MainViewModel, profile: BusinessProfile) {
                         onNewQuote = { navController.navigate("quote_add_edit") },
                         onAddPayment = { navController.navigate("add_payment") },
                         onSeeAllJobs = { navigateBottomTab(NavRoutes.JOBS) },
-                        onProfileClick = { navController.navigate(NavRoutes.BUSINESS_PROFILE) }
+                        onProfileClick = { navController.navigate(NavRoutes.BUSINESS_PROFILE) },
+                        onReceivablesClick = { navController.navigate(NavRoutes.RECEIVABLES) }
                     )
                 }
 
@@ -245,7 +265,20 @@ fun MainAppNavigation(viewModel: MainViewModel, profile: BusinessProfile) {
                         onNavigateReports = { navController.navigate(NavRoutes.REPORTS) },
                         onNavigateProfile = { navController.navigate(NavRoutes.BUSINESS_PROFILE) },
                         onNavigateBackup = { navController.navigate(NavRoutes.BACKUP_SETTINGS) },
-                        onNavigateSettings = { navController.navigate(NavRoutes.SETTINGS) }
+                        onNavigateSettings = { navController.navigate(NavRoutes.SETTINGS) },
+                        onNavigateReceivables = { navController.navigate(NavRoutes.RECEIVABLES) }
+                    )
+                }
+
+                // Alacaklar (bekleyen ödemeler)
+                composable(NavRoutes.RECEIVABLES) {
+                    ReceivablesScreen(
+                        jobs = jobs,
+                        payments = payments,
+                        currencySymbol = profile.currencySymbol,
+                        businessName = profile.businessName,
+                        onCustomerClick = { custId -> navController.navigate("customer_detail/$custId") },
+                        onBack = { navController.popBackStack() }
                     )
                 }
 
@@ -498,7 +531,9 @@ fun MainAppNavigation(viewModel: MainViewModel, profile: BusinessProfile) {
                         onUpdateTheme = { mode ->
                             viewModel.updateProfile(profile.copy(themeMode = mode))
                         },
-                        onBack = { navController.popBackStack() }
+                        onBack = { navController.popBackStack() },
+                        reminderMinutes = reminderMinutes,
+                        onUpdateReminder = { viewModel.setReminderMinutes(it) }
                     )
                 }
             }

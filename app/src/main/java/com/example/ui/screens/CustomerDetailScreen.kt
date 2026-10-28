@@ -2,6 +2,10 @@ package com.example.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import com.example.util.WhatsAppUtil
+import com.example.ui.components.WhatsAppTemplate
+import com.example.ui.components.WhatsAppButton
+import androidx.compose.runtime.produceState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -90,6 +94,9 @@ fun CustomerDetailScreen(
     val customerBundle by repository.getCustomerWithDetails(customerId).collectAsStateWithLifecycle(initialValue = null)
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf(0) } // 0: İşler, 1: Teklifler, 2: Tahsilatlar
+    val businessName by produceState(initialValue = "") {
+        value = runCatching { repository.getProfile().businessName }.getOrDefault("")
+    }
 
     Scaffold(
         topBar = {
@@ -195,6 +202,28 @@ fun CustomerDetailScreen(
                                 color = ForestGreenPrimary
                             )
                         }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        WhatsAppButton(
+                            phone = customer.phone,
+                            templates = buildList {
+                                if (bundle.balance > 0.0) {
+                                    add(
+                                        WhatsAppTemplate(
+                                            "Ödeme hatırlatma",
+                                            WhatsAppUtil.paymentReminder(
+                                                customer.name,
+                                                businessName,
+                                                Formatters.formatCurrency(bundle.balance, currencySymbol)
+                                            )
+                                        )
+                                    )
+                                }
+                                add(WhatsAppTemplate("Yoldayız", WhatsAppUtil.onTheWay(customer.name, businessName)))
+                                add(WhatsAppTemplate("Teşekkür / tavsiye", WhatsAppUtil.thankYou(customer.name, businessName)))
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
                         if (customer.email.isNotBlank()) {
                             Spacer(modifier = Modifier.height(8.dp))

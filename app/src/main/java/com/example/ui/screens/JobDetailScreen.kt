@@ -1,6 +1,10 @@
 package com.example.ui.screens
 
 import android.content.Intent
+import com.example.util.WhatsAppUtil
+import com.example.ui.components.WhatsAppTemplate
+import com.example.ui.components.WhatsAppButton
+import androidx.compose.runtime.produceState
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -109,6 +113,9 @@ fun JobDetailScreen(
     var bundle by remember { mutableStateOf<JobDetailBundle?>(null) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var selectedPhotoCategory by remember { mutableStateOf("ONCE") } // ONCE, SONRA
+    val businessName by produceState(initialValue = "") {
+        value = runCatching { repository.getProfile().businessName }.getOrDefault("")
+    }
 
     suspend fun refreshBundle() {
         bundle = repository.getJobBundle(jobId)
@@ -399,6 +406,48 @@ fun JobDetailScreen(
                                 )
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(12.dp))
+                        val waTotal = Formatters.formatCurrency(
+                            if (job.finalPrice > 0) job.finalPrice else job.estimatedPrice,
+                            currencySymbol
+                        )
+                        val waRemaining = if (currentBundle.remainingBalance > 0.0) {
+                            Formatters.formatCurrency(currentBundle.remainingBalance, currencySymbol)
+                        } else null
+                        WhatsAppButton(
+                            phone = customer.phone,
+                            templates = buildList {
+                                add(
+                                    WhatsAppTemplate(
+                                        "Randevu hatırlatma",
+                                        WhatsAppUtil.appointmentReminder(
+                                            customer.name,
+                                            businessName,
+                                            job.title,
+                                            Formatters.formatDate(job.scheduledDate),
+                                            job.scheduledTime
+                                        )
+                                    )
+                                )
+                                add(WhatsAppTemplate("Yoldayız", WhatsAppUtil.onTheWay(customer.name, businessName)))
+                                add(
+                                    WhatsAppTemplate(
+                                        "İş tamamlandı",
+                                        WhatsAppUtil.jobCompleted(customer.name, businessName, job.title, waTotal, waRemaining)
+                                    )
+                                )
+                                if (waRemaining != null) {
+                                    add(
+                                        WhatsAppTemplate(
+                                            "Ödeme hatırlatma",
+                                            WhatsAppUtil.paymentReminder(customer.name, businessName, waRemaining)
+                                        )
+                                    )
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 }
 

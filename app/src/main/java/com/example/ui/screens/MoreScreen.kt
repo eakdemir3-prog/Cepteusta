@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.StatusError
+import com.example.ui.theme.StatusErrorContainer
+import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -72,7 +75,8 @@ fun MoreScreen(
     onNavigateReports: () -> Unit,
     onNavigateProfile: () -> Unit,
     onNavigateBackup: () -> Unit,
-    onNavigateSettings: () -> Unit
+    onNavigateSettings: () -> Unit,
+    onNavigateReceivables: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -175,6 +179,17 @@ fun MoreScreen(
                         subtitle = "Fiyat teklifleri hazırlama ve PDF paylaşımı",
                         tag = "menu_quotes",
                         onClick = onNavigateQuotes
+                    )
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
+
+                    MoreMenuItem(
+                        icon = Icons.Default.AccountBalanceWallet,
+                        iconBg = StatusErrorContainer,
+                        iconTint = StatusError,
+                        title = "Alacaklar",
+                        subtitle = "Ödemesi bekleyen müşteriler ve WhatsApp hatırlatma",
+                        tag = "menu_receivables",
+                        onClick = onNavigateReceivables
                     )
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outline.copy(alpha = 0.15f))
 
