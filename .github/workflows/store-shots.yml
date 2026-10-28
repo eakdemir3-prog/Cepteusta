@@ -1,0 +1,40 @@
+name: Mağaza Ekran Görüntüleri
+
+# Gerçek uygulama ekranlarını örnek verilerle (Robolectric) PNG olarak üretir.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+      - name: Debug anahtarı
+        run: keytool -genkeypair -noprompt -keystore "$GITHUB_WORKSPACE/debug.keystore" -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 1000 -storepass android -keypass android -dname "CN=Android Debug"
+      - name: Ekranları üret
+        run: gradle :app:testDebugUnitTest --tests "com.example.StoreScreenshotTest" --no-daemon --stacktrace || true
+      - name: Paketle
+        run: |
+          mkdir -p out
+          ls -la app/build/store-shots || true
+          if [ -d app/build/store-shots ]; then cd app/build/store-shots && zip -q ../../../out/store-shots.zip *.png; cd -; fi
+          if [ -d app/build/test-results ]; then cd app/build && zip -qr ../../out/test-results.zip test-results reports/tests || true; cd -; fi
+          ls -la out
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: shots-${{ github.run_number }}
+          prerelease: true
+          name: "Ekran görüntüleri ${{ github.run_number }}"
+          body: "Play Store için otomatik üretilmiş ekran görüntüleri."
+          files: out/*
